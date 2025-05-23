@@ -1,4 +1,4 @@
-name: Inject API Secrets and Push
+name: Inject API Secrets
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  inject-and-push:
+  inject-secrets:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,15 +17,3 @@ jobs:
         run: |
           sed -i "s|const apiKey = \".*\";|const apiKey = \"${{ secrets.GOOGLE_API_KEY }}\";|" code.js
           sed -i "s|const cx = \".*\";|const cx = \"${{ secrets.GOOGLE_CX }}\";|" code.js
-
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Commit and push if changes were made
-        run: |
-          git add code.js
-          git diff --cached --quiet || \
-          (git commit -m "Inject API secrets into code.js" && \
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main)
