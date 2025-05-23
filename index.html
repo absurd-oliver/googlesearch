@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Google Search Box</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="code.js"></script>
+</head>
+<body>
+  <form class="search-box" onsubmit="performSearch(event)" novalidate>
+    <input type="text" id="searchInput" placeholder="Search Google..." autocomplete="off" />
+    <button type="button" id="clearBtn" title="Clear search" aria-label="Clear search">&times;</button>
+    <button type="submit">Search</button>
+  </form>
+  <div id="results" class="results"></div>
+</body>
+</html>
