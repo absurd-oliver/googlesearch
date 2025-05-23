@@ -26,8 +26,8 @@ async function performSearch(event) {
   const query = document.getElementById("searchInput").value.trim();
   if (!query) return;
 
-  const apiKey = "AIzaSyAonWg7ZCK3h-Jpl0_Sz-sHXwfsQLzygNA";
-  const cx = "035a69efb41f84e96";
+  const apiKey = "YOUR_API_KEY";
+  const cx = "YOUR_CX";
   const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cx}&q=${encodeURIComponent(query)}`;
 
   const resultsContainer = document.getElementById("results");
