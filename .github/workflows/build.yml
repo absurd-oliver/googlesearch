@@ -1,25 +1,31 @@
-name: Inject API Secrets
+name: Inject API Secrets and Push
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
-  inject-secrets:
+  inject-and-push:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Replace placeholders in code.js with secrets
+      - name: Replace API keys in code.js
         run: |
-          sed -i 's/YOUR_API_KEY/${{ secrets.API_KEY }}/g' code.js
-          sed -i 's/YOUR_CX/${{ secrets.CX }}/g' code.js
+          sed -i "s|const apiKey = \".*\";|const apiKey = \"${{ secrets.GOOGLE_API_KEY }}\";|" code.js
+          sed -i "s|const cx = \".*\";|const cx = \"${{ secrets.GOOGLE_CX }}\";|" code.js
 
-      - name: Commit and push if code.js changed
+      - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push if changes were made
+        run: |
           git add code.js
-          git diff --cached --quiet || (git commit -m "Inject API secrets into code.js" && git push)
+          git diff --cached --quiet || \
+          (git commit -m "Inject API secrets into code.js" && \
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main)
